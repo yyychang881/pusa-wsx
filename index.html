@@ -2,7 +2,6 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <!-- 🛡️ 戰術防禦：設定 viewport-fit=cover 啟用 iPhone 動態島與全螢幕安全區 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>高雄市妙音精舍｜聞思修學堂</title>
   <style>
@@ -12,45 +11,24 @@
         font-family: "Microsoft JhengHei", sans-serif;
     }
     
-    /* === 📍 主系統載入區 (隱藏的 iframe) === */
-    #gas-container {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        opacity: 0; pointer-events: none; /* 初期不可見且不可點擊 */
-        transition: opacity 1.5s ease-in-out; /* 柔和淡入 */
-        z-index: 1;
-        /* 🗡️ 視覺裁切利刃：往上提 36px 砍掉橫幅，並補足高度 */
-        margin-top: -36px; height: calc(100% + 36px);
-    }
-    #gas-container iframe {
-        width: 100%; height: 100%; border: none;
-    }
-
-    /* === 📍 首頁動畫區 (大音希聲極致視覺) === */
+    /* === 首頁動畫區 === */
     #scene { 
         position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
         background: radial-gradient(circle at 70% 30%, #fdf5e6 0%, #edeada 100%);
         z-index: 10;
-        transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
-        
-        /* 🛡️ 戰術防禦：動態島與底端手勢列的安全結界 */
-        padding-top: env(safe-area-inset-top);
-        padding-bottom: env(safe-area-inset-bottom);
-        box-sizing: border-box;
-        cursor: pointer; /* 提示可點擊 */
+        transition: opacity 1.5s ease-in-out;
+        cursor: pointer;
     }
-
     .ambient-glow {
         position: absolute; width: 100%; height: 100%; top: 0; left: 0;
         background: radial-gradient(circle at 30% 70%, rgba(218, 165, 32, 0.15) 0%, transparent 60%);
         animation: glowMove 15s ease-in-out infinite alternate;
     }
-
     .text-container {
         position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
         display: flex; flex-direction: row-reverse; align-items: center; justify-content: center;
         animation: textFloat 6s ease-in-out infinite alternate;
     }
-
     .title { 
         writing-mode: vertical-rl; font-size: 52px; letter-spacing: 25px; 
         color: #4a3528; margin-left: 30px; font-weight: bold;
@@ -58,23 +36,14 @@
     .subtitle { 
         writing-mode: vertical-rl; font-size: 36px; letter-spacing: 18px; color: #6d4c41; 
     }
-
     @keyframes textFloat { 0% { transform: translate(-50%, -52%); } 100% { transform: translate(-50%, -48%); } }
     @keyframes glowMove { 0% { transform: translate(-5%, -5%); } 100% { transform: translate(5%, 5%); } }
-
-    /* === 轉場特效 Class === */
-    .fade-out { opacity: 0 !important; transform: scale(1.05); pointer-events: none; }
+    .fade-out { opacity: 0 !important; pointer-events: none; }
   </style>
 </head>
 <body>
 
-  <!-- 🎯 暗中部署：預載您的 GAS 主系統 -->
-  <div id="gas-container">
-<iframe src="https://sites.google.com/view/pusa-wsx?usp=sharing" title="聞思修學堂系統"></iframe>
-    
-  </div>
-
-  <!-- 🎯 先鋒登陸：首頁光韻動畫 -->
+  <!-- 首頁光韻動畫 -->
   <div id="scene">
     <div class="ambient-glow"></div>
     <div class="text-container">
@@ -86,33 +55,26 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
         const scene = document.getElementById('scene');
-        const gasContainer = document.getElementById('gas-container');
         let isTransitioning = false;
+        
+        // ⚠️ 指揮官：請把下面這段網址，換成您剛剛建立的 Google Sites 網址！
+        const googleSitesUrl = "https://sites.google.com/view/pusa-wsx?usp=sharing";
 
-        // 轉場執行函數：水波消散與系統浮現
         function enterSystem() {
             if (isTransitioning) return;
             isTransitioning = true;
             
-            // 步驟一：動畫區淡出並微放大
+            // 畫面淡出
             scene.classList.add('fade-out');
 
-            // 步驟二：等待 1.5 秒淡出動畫結束後，浮現底下的主系統
+            // 等待 1.5 秒淡出動畫結束後，直接「跳轉」到 Google Sites
             setTimeout(() => {
-                gasContainer.style.opacity = '1';
-                gasContainer.style.pointerEvents = 'auto'; // 啟動滑鼠點擊權限
-                
-                // 徹底移除動畫區塊，釋放手機效能
-                setTimeout(() => {
-                    scene.style.display = 'none';
-                }, 1000);
+                window.location.href = googleSitesUrl;
             }, 1500); 
         }
 
-        // 【引信一】：時間的沉澱 (7秒後自動轉場)
         const autoTimer = setTimeout(enterSystem, 7000);
 
-        // 【引信二】：主動的叩門
         scene.addEventListener('click', () => {
             clearTimeout(autoTimer);
             enterSystem();
