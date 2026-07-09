@@ -82,26 +82,26 @@
     </div>
   </div>
 
-  <script>
+<script>
     document.addEventListener('DOMContentLoaded', () => {
         const scene = document.getElementById('scene');
-        const gasContainer = document.getElementById('gas-container');
         let isTransitioning = false;
+        
+        // ⚠️ 指揮官：請將下方的網址，換成您真正的 GAS 正式發佈網址
+        const gasUrl = "https://script.google.com/macros/s/AKfycbx9AC8OphDyXMPWi7LH0t4w5VgVqiPXXDdhfBMCcj2KEB9rrIov0WcUUzbcM_FVzCwk/exec";
 
-        // 轉場執行函數：水波消散與系統浮現
+        // 轉場執行函數：水波消散與星門傳送
         function enterSystem() {
             if (isTransitioning) return;
             isTransitioning = true;
             
-            // 動畫區淡出並微放大 (營造推門進入的空間感)
+            // 步驟一：動畫區淡出並微放大 (營造推門進入的空間感)
             scene.classList.add('fade-out');
-            // 主系統淡入，展現您的登入區與放大鏡圖示
-            gasContainer.classList.add('fade-in');
 
-            // 轉場完成後，徹底移除動畫區以釋放裝置記憶體，確保系統順暢
+            // 步驟二：等待 1.5 秒淡出動畫結束後，直接傳送至主系統
             setTimeout(() => {
-                scene.remove();
-            }, 1500); // 配合 CSS 的 1.5s 柔和轉場
+                window.location.href = gasUrl;
+            }, 1500); 
         }
 
         // 【引信一】：時間的沉澱 (7秒後自動轉場)
@@ -113,9 +113,8 @@
             enterSystem();
         });
         
-        // 確保手機端觸控反應極致靈敏
         scene.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // 防止穿透點擊影響後方系統
+            e.preventDefault(); 
             clearTimeout(autoTimer);
             enterSystem();
         }, { passive: false });
