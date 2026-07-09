@@ -18,6 +18,8 @@
         opacity: 0; pointer-events: none; /* 初期不可見且不可點擊 */
         transition: opacity 1.5s ease-in-out; /* 柔和淡入 */
         z-index: 1;
+        /* 🗡️ 視覺裁切利刃：往上提 36px 砍掉橫幅，並補足高度 */
+        margin-top: -36px; height: calc(100% + 36px);
     }
     #gas-container iframe {
         width: 100%; height: 100%; border: none;
@@ -62,14 +64,12 @@
 
     /* === 轉場特效 Class === */
     .fade-out { opacity: 0 !important; transform: scale(1.05); pointer-events: none; }
-    .fade-in { opacity: 1 !important; pointer-events: auto !important; }
   </style>
 </head>
 <body>
 
   <!-- 🎯 暗中部署：預載您的 GAS 主系統 -->
   <div id="gas-container">
-    <!-- 指揮官，請將下方 src 替換為您的 Google Apps Script 發佈網址 -->
     <iframe src="https://script.google.com/macros/s/AKfycbx9AC8OphDyXMPWi7LH0t4w5VgVqiPXXDdhfBMCcj2KEB9rrIov0WcUUzbcM_FVzCwk/exec" title="聞思修學堂系統"></iframe>
   </div>
 
@@ -82,32 +82,36 @@
     </div>
   </div>
 
-<script>
+  <script>
     document.addEventListener('DOMContentLoaded', () => {
         const scene = document.getElementById('scene');
+        const gasContainer = document.getElementById('gas-container');
         let isTransitioning = false;
-        
-        // ⚠️ 指揮官：請將下方的網址，換成您真正的 GAS 正式發佈網址
-        const gasUrl = "https://script.google.com/macros/s/AKfycbx9AC8OphDyXMPWi7LH0t4w5VgVqiPXXDdhfBMCcj2KEB9rrIov0WcUUzbcM_FVzCwk/exec";
 
-        // 轉場執行函數：水波消散與星門傳送
+        // 轉場執行函數：水波消散與系統浮現
         function enterSystem() {
             if (isTransitioning) return;
             isTransitioning = true;
             
-            // 步驟一：動畫區淡出並微放大 (營造推門進入的空間感)
+            // 步驟一：動畫區淡出並微放大
             scene.classList.add('fade-out');
 
-            // 步驟二：等待 1.5 秒淡出動畫結束後，直接傳送至主系統
+            // 步驟二：等待 1.5 秒淡出動畫結束後，浮現底下的主系統
             setTimeout(() => {
-                window.location.href = gasUrl;
+                gasContainer.style.opacity = '1';
+                gasContainer.style.pointerEvents = 'auto'; // 啟動滑鼠點擊權限
+                
+                // 徹底移除動畫區塊，釋放手機效能
+                setTimeout(() => {
+                    scene.style.display = 'none';
+                }, 1000);
             }, 1500); 
         }
 
         // 【引信一】：時間的沉澱 (7秒後自動轉場)
         const autoTimer = setTimeout(enterSystem, 7000);
 
-        // 【引信二】：主動的叩門 (點擊畫面任何一處立即攔截計時並轉場)
+        // 【引信二】：主動的叩門
         scene.addEventListener('click', () => {
             clearTimeout(autoTimer);
             enterSystem();
